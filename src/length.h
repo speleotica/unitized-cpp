@@ -105,7 +105,7 @@ private:
         case Yards: return value / (3 * 0.3048);
         case Inches: return value * 12 / 0.3048;
         }
-        return 0.0;
+        return NAN;
     }
     inline double toBase(double value, Unit from) const {
         switch (from) {
@@ -117,7 +117,7 @@ private:
         case Yards: return value * 3 * 0.3048;
         case Inches: return value * 0.3048 / 12;
         }
-        return 0.0;
+        return NAN;
     }
 };
 
