@@ -1,7 +1,7 @@
 #ifndef UNITIZED_LENGTH_H
 #define UNITIZED_LENGTH_H
 
-#include <cmath>
+#include "angle.h"
 
 namespace unitized {
 
@@ -18,109 +18,64 @@ public:
         Miles = 7
     };
 
-    inline Length(double value, Unit unit): unit(unit), value(value) {};
+    Length(double value, Unit unit);
 
-    inline double get(Unit unit) const {
-        return convert(value, Length::unit, unit);
-    }
+    static Length meters(double value);
+    static Length centimeters(double value);
+    static Length kilometers(double value);
+    static Length feet(double value);
+    static Length yards(double value);
+    static Length inches(double value);
+    static Length miles(double value);
 
-    inline Length inUnit(Unit unit) const {
-        return Length(get(unit), unit);
-    }
+    static Angle atan2(Length y, Length x);
 
-    inline Length add(Length addend) const {
-        return Length(value + addend.get(unit), unit);
-    }
-    inline Length sub(Length subtrahend) const {
-        return Length(value - subtrahend.get(unit), unit);
-    }
-    inline Length mul(double multiplicand) const {
-        return Length(value * multiplicand, unit);
-    }
-    inline Length div(double denominator) const {
-        return Length(value / denominator, unit);
-    }
-    inline double divUnitless(Length denominator) const {
-        return value / denominator.get(unit);
-    }
-    inline Length mod(Length modulus) const {
-        return Length(fmod(value, modulus.get(unit)), unit);
-    }
+    double convertTo(Unit unit) const;
+    double toMeters() const;
+    double toCentimeters() const;
+    double toKilometers() const;
+    double toFeet() const;
+    double toYards() const;
+    double toInches() const;
+    double toMiles() const;
 
-    inline Length abs() const {
-        return Length(fabs(value), unit);
-    }
-    inline Length negate() const {
-        return Length(-value, unit);
-    }
+    Length as(Unit unit) const;
+    Length asMeters() const;
+    Length asCentimeters() const;
+    Length asKilometers() const;
+    Length asFeet() const;
+    Length asYards() const;
+    Length asInches() const;
+    Length asMiles() const;
 
-    inline bool isFinite() const {
-        return isfinite(value);
-    }
-    inline bool isInfinite() const {
-        return isinf(value);
-    }
-    inline bool isNaN() const {
-        return isnan(value);
-    }
-    inline bool isNegative() const {
-        return value < 0;
-    }
-    inline bool isPositive() const {
-        return value > 0;
-    }
-    inline bool isZero() const {
-        return value == 0;
-    }
-    inline bool isNonzero() const {
-        return value != 0;
-    }
-
-    inline bool equals(Length other) const {
-        return value == other.get(unit);
-    }
-
-    inline int compareTo(Length other) const {
-        double otherValue = other.get(unit);
-        return value > otherValue ? 1 : value < otherValue ? -1 : 0;
-    }
+    Length add(Length addend) const;
+    Length sub(Length subtrahend) const;
+    Length mul(double multiplicand) const;
+    Length div(double denominator) const;
+    double divUnitless(Length denominator) const;
+    Length mod(Length modulus) const;
+    Length abs() const;
+    Length negate() const;
+    bool isFinite() const;
+    bool isInfinite() const;
+    bool isNaN() const;
+    bool isNegative() const;
+    bool isPositive() const;
+    bool isZero() const;
+    bool isNonzero() const;
+    bool equals(Length other) const;
+    int compareTo(Length other) const;
 
     const Unit unit;
 
 private:
     const double value;
 
-    inline double convert(double value, Unit from, Unit to) const {
-        if (from == to) return value;
-        return fromBase(toBase(value, from), to);
-    };
-
-    inline double fromBase(double value, Unit to) const {
-        switch (to) {
-        case Meters: return value;
-        case Centimeters: return value * 100;
-        case Kilometers: return value * 0.001;
-        case Feet: return value / 0.3048;
-        case Miles: return value / (5280 * 0.3048);
-        case Yards: return value / (3 * 0.3048);
-        case Inches: return value * 12 / 0.3048;
-        }
-        return NAN;
-    }
-    inline double toBase(double value, Unit from) const {
-        switch (from) {
-        case Meters: return value;
-        case Centimeters: return value * 0.01;
-        case Kilometers: return value * 1000;
-        case Feet: return value * 0.3048;
-        case Miles: return value * 5280 * 0.3048;
-        case Yards: return value * 3 * 0.3048;
-        case Inches: return value * 0.3048 / 12;
-        }
-        return NAN;
-    }
+    static double convert(double value, Unit from, Unit to);
+    static double fromBase(double value, Unit to);
+    static double toBase(double value, Unit from);
 };
 
-} // namespace dewalls
+} // namespace unitized
 
 #endif // UNITIZED_LENGTH_H
